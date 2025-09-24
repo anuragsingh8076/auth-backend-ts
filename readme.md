@@ -1,125 +1,138 @@
+
 # Firebase Auth Backend
 
-A **Node.js + TypeScript backend** for authentication using Firebase.  
-Supports **email/password signup & signin**, **Google Sign-In**, **session cookies**, and **email verification links**.  
+A **Node.js + TypeScript backend** for user authentication using **Firebase**, supporting **email/password signup & signin**, **Google Sign-In**, session cookies, and email verification links.
 
 ---
 
 ## Features
 
-- **Email & Password Authentication**
-- **Google Sign-In**
-- **Session Management with Cookies**
-- **Email Verification Link Generation**
-- **Protected Routes Example**
-- **CORS & Security Headers Configured**
+- Signup with email and password
+- Signin with email and password
+- Google Sign-In
+- Session management using cookies
+- Signout (clear session cookie)
+- Generate email verification links
+- Built with **Express**, **TypeScript**, and **Firebase Admin SDK**
+- Secure with **Helmet** and **CORS** support
 
 ---
 
-## File Structure
+## Tech Stack
+
+- Node.js
+- TypeScript
+- Express.js
+- Firebase (Authentication)
+- Axios (for Firebase REST API)
+- Cookie-parser (for session cookies)
+- Helmet & CORS (security & cross-origin support)
+
+---
+
+## Folder Structure
+
+
 
 auth-backend-ts/
 │
 ├─ src/
 │ ├─ config/
-│ │ └─ firebase.ts # Firebase initialization
-│ │
+│ │ └─ firebase.ts # Firebase Admin SDK initialization
 │ ├─ controllers/
-│ │ └─ authController.ts # Handles signup, signin, Google signin, signout, email verification
-│ │
+│ │ └─ authController.ts # Handles signup, signin, Google sign-in, signout, email verification
 │ ├─ routes/
-│ │ ├─ authRoutes.ts # Authentication routes
-│ │ └─ protectedRoutes.ts # Example of protected routes
-│ │
+│ │ ├─ authRoutes.ts # Routes for authentication endpoints
+│ │ └─ protectedRoutes.ts # Routes for authenticated users
 │ ├─ utils/
 │ │ └─ validator.ts # Email validation utility
-│ │
-│ └─ index.ts # Express server entry point
+│ └─ index.ts # Entry point, Express server setup
 │
 ├─ .env # Environment variables
 ├─ package.json
 ├─ tsconfig.json
-└─ serviceAccountKey.json # Firebase service account
+└─ README.md
 
-yaml
-Copy code
 
 ---
 
-## Setup
+## Environment Variables (`.env`)
 
-1. **Clone the repository**
+```env
+FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY
+FIREBASE_AUTH_DOMAIN=YOUR_FIREBASE_AUTH_DOMAIN
+FIREBASE_PROJECT_ID=YOUR_FIREBASE_PROJECT_ID
+FIREBASE_STORAGE_BUCKET=YOUR_FIREBASE_STORAGE_BUCKET
+FIREBASE_MESSAGING_SENDER_ID=YOUR_FIREBASE_MESSAGING_SENDER_ID
+FIREBASE_APP_ID=YOUR_FIREBASE_APP_ID
+FIREBASE_MEASUREMENT_ID=YOUR_FIREBASE_MEASUREMENT_ID
 
-```bash
-git clone https://github.com/anuragsingh8076/firebase-auth-backend.git
-cd firebase-auth-backend
-Install dependencies
-
-bash
-Copy code
-npm install
-Configure environment variables
-
-Create a .env file with:
-
-ini
-Copy code
-FIREBASE_API_KEY=your_firebase_api_key
-FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-FIREBASE_APP_ID=your_app_id
-FIREBASE_MEASUREMENT_ID=your_measurement_id
 PORT=4000
 SESSION_COOKIE_NAME=session
 SESSION_EXPIRE_DAYS=14
-
+CORS_ORIGIN=http://localhost:3000
 SERVICE_ACCOUNT_PATH=./serviceAccountKey.json
-Start the development server
 
-bash
-Copy code
+Installation
+
+Clone the repo:
+
+git clone https://github.com/anuragsingh8076/auth-backend-ts.git
+cd auth-backend-ts
+
+
+Install dependencies:
+
+npm install
+
+
+Create a .env file with your Firebase credentials and configuration.
+
+Start the development server:
+
 npm run dev
-Server runs on: http://localhost:4000
+
+
+Server will run on: http://localhost:4000
 
 API Endpoints
-Auth Routes (/api/auth)
 Method	Endpoint	Description
-POST	/signup	Create user with email/password
-POST	/signin	Sign in user with email/password
-POST	/google-signin	Sign in using Google ID token
-POST	/signout	Sign out user (clears session cookie)
-POST	/generate-email-verification	Generate email verification link
+POST	/api/auth/signup	Create a new user (email/password)
+POST	/api/auth/signin	Sign in user (email/password)
+POST	/api/auth/google-signin	Sign in with Google
+POST	/api/auth/signout	Sign out (clear session cookie)
+POST	/api/auth/generate-email-verification	Generate Firebase email verification link
+Example Request (Postman)
 
-Protected Routes (/api/...)
-Example route to test authentication with session cookie
+Signup:
 
-Usage
-Test API with Postman or frontend app
+POST /api/auth/signup
+Content-Type: application/json
 
-Send JSON body for signup/signin:
-
-json
-Copy code
 {
   "email": "user@example.com",
   "password": "password123",
-  "displayName": "John Doe" // optional for signup
+  "displayName": "John Doe"
 }
-For Google Sign-In, send:
 
-json
-Copy code
+
+Response:
+
 {
-  "idToken": "<GOOGLE_ID_TOKEN>"
+  "message": "User created",
+  "idToken": "...",
+  "refreshToken": "...",
+  "uid": "..."
 }
+
 Notes
-Ensure serviceAccountKey.json is in the project root.
 
-Cookies are HTTP-only and secure in production.
+Make sure serviceAccountKey.json is not pushed to GitHub (add it to .gitignore).
 
-CORS is configured for http://localhost:3000 by default.
+Session cookies are HTTP-only and secure for production environments.
 
-Author
-Anurag Singh
+Use Postman or frontend to test the API.
+
+License
+
+MIT © Anurag Singh
